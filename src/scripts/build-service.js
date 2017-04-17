@@ -10,6 +10,16 @@ function fillBuildInfo() {
         removeAllBuildsOnScreen();
         addAllFailingBuilds();
 
+        function setBackgroundColorBody() {
+            let backgroundColor = failedBuilds.length > 0 ? "red" : "green";
+            document.getElementById("buildinfo").style.backgroundColor = backgroundColor;
+        }
+
+        function removeAllBuildsOnScreen() {
+            [].slice.call(document.getElementsByClassName("build"))
+                .forEach(removeElement => document.body.removeChild(removeElement));
+        }
+
         function addAllFailingBuilds() {
             failedBuilds.forEach(failedBuild => {
                 var divFailedBuild = document.createElement("div");
@@ -20,34 +30,32 @@ function fillBuildInfo() {
             })
         }
 
-        function removeAllBuildsOnScreen() {
-            [].slice.call(document.getElementsByClassName("build"))
-                .forEach(removeElement => document.body.removeChild(removeElement));
-        }
-
-        function setBackgroundColorBody() {
-            let backgroundColor = failedBuilds.length > 0 ? "red" : "green";
-            document.getElementById("buildinfo").style.backgroundColor = backgroundColor;
-        }
-
     });
 }
 
 function getFailingBuildsPromise() {
-    let init = {
-        method: 'GET',
-        headers: new Headers({
-            'Accept': 'application/json',
-            'User-Agent': 'travisbuildradiator'
-        })
-    };
 
-    let buildPromises = buildUrls.map(
-        buildToCheck =>
-            fetch(buildToCheck.url, init)
-                .then(response => response.json()
-                    .then(json => ({ name: buildToCheck.name, status: json.last_build_status })
-                    )));
+    return wrapAllFailedBuildsInOnePromise();
 
-    return Promise.all(buildPromises).then(builds => builds.filter(build => build.status !== 0).map(build => build.name));
+    function wrapAllFailedBuildsInOnePromise() {
+        return Promise.all(getBuildPromises()).then(builds => builds.filter(build => build.status !== 0).map(build => build.name));
+
+    }
+
+    function getBuildPromises() {
+        let init = {
+            method: 'GET',
+            headers: new Headers({
+                'Accept': 'application/json',
+                'User-Agent': 'travisbuildradiator'
+            })
+        };
+
+        return buildUrls.map(
+            buildToCheck =>
+                fetch(buildToCheck.url, init)
+                    .then(response => response.json()
+                        .then(json => ({ name: buildToCheck.name, status: json.last_build_status })
+                        )));
+    }
 }
