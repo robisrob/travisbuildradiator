@@ -1,7 +1,6 @@
 var buildUrls = [
     { name: "build A", url: "https://api.travis-ci.org/robisrob/buildradiator.json" },
     { name: "build B", url: "https://api.travis-ci.org/robisrob/gameoflivecsharp.json" },
-    { name: "build C", url: "https://api.travis-ci.org/SoftwareSandbox/FiAngulartje.json" },
 ];
 
 function fillBuildInfo() {
