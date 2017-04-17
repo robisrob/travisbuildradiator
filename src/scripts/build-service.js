@@ -11,7 +11,7 @@ function fillBuildInfo() {
         addAllFailingBuilds();
 
         function setBackgroundColorBody() {
-            let backgroundColor = failedBuilds.length > 0 ? "red" : "green";
+            let backgroundColor = failedBuilds.length > 0 ? "DarkRed" : "green";
             document.getElementById("buildinfo").style.backgroundColor = backgroundColor;
         }
 
