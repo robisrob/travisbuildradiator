@@ -1,8 +1,15 @@
-function getFailingBuilds() {
+function fillBuildInfo() {
+    getFailingBuildsPromise().then(failedBuilds => {
+        let backgroundColor = failedBuilds.length > 0 ? "red" : "green";
+        document.getElementById("buildinfo").style.backgroundColor = backgroundColor;
+    });
+}
+
+function getFailingBuildsPromise() {
     let buildUrls = [
         { name: "build A", url: "https://api.travis-ci.org/robisrob/buildradiator.json" },
         { name: "build B", url: "https://api.travis-ci.org/robisrob/gameoflivecsharp.json" },
-        { name: "build C", url: "https://api.travis-ci.org/Sch3lp/moobase-cmdr.json" },
+        { name: "build C", url: "https://api.travis-ci.org/SoftwareSandbox/FiAngulartje.json" },
     ];
 
     let init = {

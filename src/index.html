@@ -12,11 +12,15 @@
         .medium-height {height: 1000px;}
         .icon{width: 20px}
     </style>
-<script src="scripts/build-service"></script>
+<script src="scripts/build-service.js"></script>
 </head>
 
-<body>
-<div id="buildinfo"></div>
+<body id="buildinfo">
 </body>
+
+<script>
+fillBuildInfo();
+setInterval(fillBuildInfo, 1000);
+</script>
 
 </html>
