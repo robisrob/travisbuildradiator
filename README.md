@@ -1,5 +1,5 @@
 # BuildRadiator for Travis
-radiator for showing travis builds of multiple users
+Radiator for showing travis builds of multiple users
 
 ## Getting things started
 - Do a git clone
