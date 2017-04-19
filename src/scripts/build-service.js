@@ -31,7 +31,7 @@ function fillBuildInfo() {
         return wrapAllFailedBuildsInOnePromise();
 
         function wrapAllFailedBuildsInOnePromise() {
-            return Promise.all(getBuildPromises()).then(builds => builds.filter(build => build.status !== 0).map(build => build.name));
+            return Promise.all(getBuildPromises()).then(builds => builds.filter(build => build.status !== 0).map(build => build.alias));
 
         }
 
@@ -46,10 +46,14 @@ function fillBuildInfo() {
 
             return buildUrls.map(
                 buildToCheck =>
-                    fetch(buildToCheck.url, init)
+                    fetch(getUrl(buildToCheck.repoName), init)
                         .then(response => response.json()
-                            .then(json => ({ name: buildToCheck.name, status: json.last_build_status })
+                            .then(json => ({ alias: buildToCheck.alias, status: json.last_build_status })
                             )));
+
+            function getUrl(repoName) {
+                return "https://api.travis-ci.org/" + repoName +".json";
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
 var buildUrls = [
-    { name: "build A", url: "https://api.travis-ci.org/robisrob/buildradiator.json" },
-    { name: "build B", url: "https://api.travis-ci.org/robisrob/gameoflivecsharp.json" },
+    { alias: "Team What", repoName: "robisrob/buildradiator" },
+    { alias: "Team Stop", repoName: "SoftwareSandbox/FiAngulartje" },
 ];
