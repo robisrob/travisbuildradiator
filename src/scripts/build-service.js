@@ -1,8 +1,3 @@
-var buildUrls = [
-    { name: "build A", url: "https://api.travis-ci.org/robisrob/buildradiator.json" },
-    { name: "build B", url: "https://api.travis-ci.org/robisrob/gameoflivecsharp.json" },
-];
-
 function fillBuildInfo() {
     getFailingBuildsPromise().then(failedBuilds => {
         setBackgroundColorBody();
@@ -30,31 +25,32 @@ function fillBuildInfo() {
         }
 
     });
+
+    function getFailingBuildsPromise() {
+
+        return wrapAllFailedBuildsInOnePromise();
+
+        function wrapAllFailedBuildsInOnePromise() {
+            return Promise.all(getBuildPromises()).then(builds => builds.filter(build => build.status !== 0).map(build => build.name));
+
+        }
+
+        function getBuildPromises() {
+            let init = {
+                method: 'GET',
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'User-Agent': 'travisbuildradiator'
+                })
+            };
+
+            return buildUrls.map(
+                buildToCheck =>
+                    fetch(buildToCheck.url, init)
+                        .then(response => response.json()
+                            .then(json => ({ name: buildToCheck.name, status: json.last_build_status })
+                            )));
+        }
+    }
 }
 
-function getFailingBuildsPromise() {
-
-    return wrapAllFailedBuildsInOnePromise();
-
-    function wrapAllFailedBuildsInOnePromise() {
-        return Promise.all(getBuildPromises()).then(builds => builds.filter(build => build.status !== 0).map(build => build.name));
-
-    }
-
-    function getBuildPromises() {
-        let init = {
-            method: 'GET',
-            headers: new Headers({
-                'Accept': 'application/json',
-                'User-Agent': 'travisbuildradiator'
-            })
-        };
-
-        return buildUrls.map(
-            buildToCheck =>
-                fetch(buildToCheck.url, init)
-                    .then(response => response.json()
-                        .then(json => ({ name: buildToCheck.name, status: json.last_build_status })
-                        )));
-    }
-}
