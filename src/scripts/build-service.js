@@ -31,7 +31,7 @@ function fillBuildInfo() {
         return wrapAllFailedBuildsInOnePromise();
 
         function wrapAllFailedBuildsInOnePromise() {
-            return Promise.all(getBuildPromises()).then(builds => builds.filter(build => build.status !== 0).map(build => build.alias));
+            return Promise.all(getBuildPromises()).then(builds => builds.filter(build => build.status !== 0 && build.status != null).map(build => build.alias));
 
         }
 
@@ -48,7 +48,7 @@ function fillBuildInfo() {
                 buildToCheck =>
                     fetch(getUrl(buildToCheck.repoName), init)
                         .then(response => response.json()
-                            .then(json => ({ alias: buildToCheck.alias, status: json.last_build_status })
+                            .then(json => ({ alias: buildToCheck.alias, status: json.last_build_result })
                             )));
 
             function getUrl(repoName) {
